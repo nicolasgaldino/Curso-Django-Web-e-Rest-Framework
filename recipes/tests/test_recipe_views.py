@@ -7,27 +7,10 @@ from django.urls import (
 
 
 class RecipeViewsTest(TestCase):
+    # Home View Tests
     def test_recipe_home_view_function_is_working(self):
         home_view = resolve(reverse('recipes:home'))
         self.assertIs(home_view.func, views.home)
-
-    def test_recipe_category_view_function_is_working(self):
-        category_view = resolve(
-            reverse(
-                'recipes:category',
-                kwargs={'category_id': 1},
-            )
-        )
-        self.assertIs(category_view.func, views.category)
-
-    def test_recipe_recipe_view_function_is_working(self):
-        recipe_view = resolve(
-            reverse(
-                'recipes:recipe',
-                kwargs={'id': 1},
-            )
-        )
-        self.assertIs(recipe_view.func, views.recipe)
 
     def test_recipe_home_view_returns_status_code_200_ok(self):
         response = self.client.get(reverse('recipes:home'))
@@ -46,3 +29,44 @@ class RecipeViewsTest(TestCase):
             'Não há receitas cadastradas.',
             response.content.decode('utf-8')
         )
+    # Home View Tests
+
+    # Category View Tests
+    def test_recipe_category_view_function_is_working(self):
+        category_view = resolve(
+            reverse(
+                'recipes:category',
+                kwargs={'category_id': 1},
+            )
+        )
+        self.assertIs(category_view.func, views.category)
+
+    def test_recipe_category_view_returns_404_if_no_recipes_found(self):
+        response = self.client.get(
+            reverse(
+                'recipes:category',
+                kwargs={'category_id': 1000},
+            )
+        )
+        self.assertEqual(response.status_code, 404)
+    # Category View Tests
+
+    # Recipe Detail View Tests
+    def test_recipe_detail_function_is_working(self):
+        recipe_detail = resolve(
+            reverse(
+                'recipes:recipe',
+                kwargs={'id': 1},
+            )
+        )
+        self.assertIs(recipe_detail.func, views.recipe)
+
+    def test_recipe_detail_returns_404_if_no_recipes_found(self):
+        response = self.client.get(
+            reverse(
+                'recipes:recipe',
+                kwargs={'id': 1000},
+            )
+        )
+        self.assertEqual(response.status_code, 404)
+    # Recipe Detail View Tests

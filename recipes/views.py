@@ -7,7 +7,7 @@ from django.shortcuts import (
 
 
 def home(request):
-    recipes = Recipe.objects.all() #used to run tests, because the tests data base not is the same of the system # noqa
+    recipes = Recipe.objects.all()
     # recipes = get_list_or_404(
     #     Recipe.objects.filter(
     #         is_published=True,

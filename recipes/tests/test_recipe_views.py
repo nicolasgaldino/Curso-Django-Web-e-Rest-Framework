@@ -1,25 +1,24 @@
-from django.test import TestCase
 from recipes import views
-from django.urls import (
-    reverse,
-    resolve,
-)
+from django.urls import reverse, resolve
+from .test_recipe_base import RecipeTesBase
 
 
-class RecipeViewsTest(TestCase):
+class RecipeViewsTest(RecipeTesBase):
     # Home View Tests
     def test_recipe_home_view_function_is_working(self):
         home_view = resolve(reverse('recipes:home'))
         self.assertIs(home_view.func, views.home)
 
     def test_recipe_home_view_returns_status_code_200_ok(self):
+        self.make_recipe()
         response = self.client.get(reverse('recipes:home'))
         self.assertEqual(response.status_code, 200)
 
     def test_recipe_home_view_load_correct_template(self):
-        template = self.client.get(reverse('recipes:home'))
+        self.make_recipe()
+        response = self.client.get(reverse('recipes:home'))
         self.assertTemplateUsed(
-            template,
+            response,
             'recipes/pages/home.html',
         )
 
@@ -29,6 +28,16 @@ class RecipeViewsTest(TestCase):
             'Não há receitas cadastradas.',
             response.content.decode('utf-8')
         )
+
+    def test_recipe_home_template_loads_recipes(self):
+        self.make_recipe()
+        response = self.client.get(reverse('recipes:home'))
+        response_content_recipes = response.content.decode('utf-8')
+        response_context_recipes = response.context['recipes']
+        self.assertIn('Test Testado', response_content_recipes)
+        self.assertIn('10 Minutos', response_content_recipes)
+        self.assertIn('10 Pessoas', response_content_recipes)
+        self.assertEqual(len(response_context_recipes), 1)
     # Home View Tests
 
     # Category View Tests

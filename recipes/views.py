@@ -1,4 +1,4 @@
-from recipes.models import Recipe
+from .models import Recipe
 from django.shortcuts import (
     render,
     get_list_or_404,
@@ -7,15 +7,13 @@ from django.shortcuts import (
 
 
 def home(request):
-    recipes = Recipe.objects.all()
-    # recipes = get_list_or_404(
-    #     Recipe.objects.filter(
-    #         is_published=True,
-    #     ).order_by('id')
-    # )
+    # recipes = Recipe.objects.all()
+    recipes = Recipe.objects.filter(
+            is_published=True
+        ).order_by('-id')
     return render(request, "recipes/pages/home.html", context={
-        'recipes': recipes
-    })
+            'recipes': recipes
+        })
 
 
 def category(request, category_id):

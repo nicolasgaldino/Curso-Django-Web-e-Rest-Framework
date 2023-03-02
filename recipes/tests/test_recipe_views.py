@@ -1,10 +1,9 @@
 from recipes import views
-from unittest import skip
 from django.urls import reverse, resolve
-from .test_recipe_base import RecipeTesBase
+from .test_recipe_base import RecipeTestBase
 
 
-class RecipeViewsTest(RecipeTesBase):
+class RecipeViewsTest(RecipeTestBase):
     # Home View Tests
     def test_recipe_home_view_function_is_working(self):
         home_view = resolve(reverse('recipes:home'))
@@ -23,7 +22,6 @@ class RecipeViewsTest(RecipeTesBase):
             'recipes/pages/home.html',
         )
 
-    @skip('WIP')
     def test_recipe_home_shows_no_recipes_found_if_no_recipes(self):
         response = self.client.get(reverse('recipes:home'))
         self.assertIn(
@@ -80,6 +78,16 @@ class RecipeViewsTest(RecipeTesBase):
             )
         response_content_recipes = response.content.decode('utf-8')
         self.assertIn(needed_title, response_content_recipes)
+
+    def test_recipe_category_template_dont_load_recipe_is_published(self):
+        recipe = self.make_recipe(is_published=False)
+        response = self.client.get(
+            reverse(
+                'recipes:category',
+                kwargs={'category_id': recipe.category.id}
+                )
+            )
+        self.assertEqual(response.status_code, 404)
     # Category View Tests
 
     # Recipe Detail View Tests
@@ -112,4 +120,14 @@ class RecipeViewsTest(RecipeTesBase):
             )
         response_content_recipes = response.content.decode('utf-8')
         self.assertIn(needed_title, response_content_recipes)
+
+    def test_recipe_detail_template_dont_load_recipe_is_published(self):
+        recipe = self.make_recipe(is_published=False)
+        response = self.client.get(
+            reverse(
+                'recipes:recipe',
+                kwargs={'id': recipe.id}
+                )
+            )
+        self.assertEqual(response.status_code, 404)
     # Recipe Detail View Tests

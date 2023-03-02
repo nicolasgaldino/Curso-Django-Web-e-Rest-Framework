@@ -3,7 +3,7 @@ from recipes.models import Category, Recipe
 from django.contrib.auth.models import User
 
 
-class RecipeTesBase(TestCase):
+class RecipeTestBase(TestCase):
     def setUp(self) -> None:
         return super().setUp()
 

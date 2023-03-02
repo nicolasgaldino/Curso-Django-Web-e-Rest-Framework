@@ -7,7 +7,6 @@ from django.shortcuts import (
 
 
 def home(request):
-    # recipes = Recipe.objects.all()
     recipes = Recipe.objects.filter(
             is_published=True
         ).order_by('-id')

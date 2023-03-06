@@ -27,3 +27,67 @@ class RecipeSearchViewTest(RecipeTestBase):
             'Search for &quot;Teste&quot;',
             response.content.decode('utf-8'),
         )
+
+    def test_recipe_search_can_find_recipe_by_title(self):
+        frst_title = 'This is recipe one'
+        scnd_title = 'This is recipe two'
+
+        frst_recipe = self.make_recipe(
+            category_data={'name': 'one'},
+            slug='one',
+            title=frst_title,
+            author_data={'username': 'one'}
+        )
+
+        scnd_recipe = self.make_recipe(
+            category_data={'name': 'two'},
+            slug='two',
+            title=scnd_title,
+            author_data={'username': 'two'}
+        )
+
+        search_url = reverse('recipes:search')
+        frst_response = self.client.get(f'{search_url}?q={frst_title}')
+        scnd_response = self.client.get(f'{search_url}?q={scnd_title}')
+        both_response = self.client.get(f'{search_url}?q=this')
+
+        self.assertIn(frst_recipe, frst_response.context['recipes'])
+        self.assertNotIn(scnd_recipe, frst_response.context['recipes'])
+
+        self.assertIn(scnd_recipe, scnd_response.context['recipes'])
+        self.assertNotIn(frst_recipe, scnd_response.context['recipes'])
+
+        self.assertIn(frst_recipe, both_response.context['recipes'])
+        self.assertIn(scnd_recipe, both_response.context['recipes'])
+
+    def test_recipe_search_can_find_recipe_by_description(self):
+        frst_descriptiom = 'This is recipe one'
+        scnd_description = 'This is recipe two'
+
+        frst_recipe = self.make_recipe(
+            category_data={'name': 'one'},
+            slug='one',
+            description=frst_descriptiom,
+            author_data={'username': 'one'}
+        )
+
+        scnd_recipe = self.make_recipe(
+            category_data={'name': 'two'},
+            slug='two',
+            description=scnd_description,
+            author_data={'username': 'two'}
+        )
+
+        search_url = reverse('recipes:search')
+        frst_response = self.client.get(f'{search_url}?q={frst_descriptiom}')
+        scnd_response = self.client.get(f'{search_url}?q={scnd_description}')
+        both_response = self.client.get(f'{search_url}?q=this')
+
+        self.assertIn(frst_recipe, frst_response.context['recipes'])
+        self.assertNotIn(scnd_recipe, frst_response.context['recipes'])
+
+        self.assertIn(scnd_recipe, scnd_response.context['recipes'])
+        self.assertNotIn(frst_recipe, scnd_response.context['recipes'])
+
+        self.assertIn(frst_recipe, both_response.context['recipes'])
+        self.assertIn(scnd_recipe, both_response.context['recipes'])

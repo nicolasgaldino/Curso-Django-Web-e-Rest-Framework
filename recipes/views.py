@@ -1,8 +1,7 @@
 from .models import Recipe
 from django.db.models import Q
 from django.http.response import Http404
-from django.core.paginator import Paginator
-from utils.pagination import make_pagination_range
+from utils.pagination import make_pagination
 from django.shortcuts import (
     render,
     get_list_or_404,
@@ -14,21 +13,7 @@ def home(request):
     recipes = Recipe.objects.filter(
             is_published=True
         ).order_by('-id')
-
-    try:
-        current_page = int(request.GET.get('page', 1))
-    except ValueError:
-        current_page = 1
-
-    paginator = Paginator(recipes, 9)
-    page_object = paginator.get_page(current_page)
-
-    pagination_range = make_pagination_range(
-            paginator.page_range,
-            4,
-            current_page,
-        )
-
+    page_object, pagination_range = make_pagination(request, recipes, 9)
     return render(request, "recipes/pages/home.html", context={
             'recipes': page_object,
             'pagination_range': pagination_range,
@@ -42,8 +27,10 @@ def category(request, category_id):
             is_published=True,
         ).order_by('id')
     )
+    page_object, pagination_range = make_pagination(request, recipes, 9)
     return render(request, "recipes/pages/category.html", context={
-        'recipes': recipes,
+        'recipes': page_object,
+        'pagination_range': pagination_range,
         'title': f'{recipes[0].category.name} - Category | ',
     })
 
@@ -74,8 +61,12 @@ def search(request):
         is_published=True,
     ).order_by('-id')
 
+    page_object, pagination_range = make_pagination(request, recipes, 2)
+
     return render(request, 'recipes/pages/search.html', {
         'page_title': f'Search for "{search_term}" |',
         'search_term': search_term,
-        'recipes': recipes,
+        'recipes': page_object,
+        'pagination_range': pagination_range,
+        'additional_url_query': f'&q={search_term}',
     })

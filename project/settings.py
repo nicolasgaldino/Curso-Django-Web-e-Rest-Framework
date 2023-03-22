@@ -21,6 +21,7 @@ INSTALLED_APPS = [
 
 INSTALLED_APPS += [
     'recipes',
+    'authors',
 ]
 
 MIDDLEWARE = [

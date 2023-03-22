@@ -309,3 +309,27 @@ h6 {
 }
 
 /* Classes Genéricas */
+
+/* Flash Messages */
+
+.message-info {
+  color: var(--color-info-dark);
+}
+
+.message-debug {
+  color: var(--color-debug-dark);
+}
+
+.message-error {
+  color: var(--color-error-dark);
+}
+
+.message-success {
+  color: var(--color-success-dark);
+}
+
+.message-warning {
+  color: var(--color-warning-dark);
+}
+
+/* Flash Messages */

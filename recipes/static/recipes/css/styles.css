@@ -308,6 +308,51 @@ h6 {
 
 /* Classes Genéricas */
 
+/* Froms */
+
+.form-content {
+  max-width: 64rem;
+  margin: 0 auto;
+  margin-bottom: var(--spacing-gutter-medium);
+}
+
+.form-content label,
+.form-content .help-text {
+  display: block;
+  margin: .5rem 0;
+  font-size: 1.4rem;
+}
+
+.form-content input {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1px solid var(--color-primary-dark);
+}
+
+.form-content button {
+  padding: 1rem 2rem;
+  border: none;
+  background: var(--color-primary-dark);
+  color: var(--color-white);
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.form-content button:hover {
+  cursor: pointer;
+  background: var(--color-gray-5);
+  color: var(--color-primary-dark-hover);
+}
+
+.form-content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  gap: calc(var(--spacing-gutter-medium) / 2) var(--spacing-gutter-medium);
+}
+
+/* Froms */
+
 /* Flash Messages */
 
 .messages-container {
@@ -352,7 +397,8 @@ h6 {
 /* Flash Messages */
 
 @media (max-width: 600px) {
-  .main-content-list {
+  .main-content-list,
+  .form-content-grid {
     grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
   }
 }

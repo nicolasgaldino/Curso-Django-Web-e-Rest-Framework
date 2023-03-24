@@ -6,7 +6,13 @@
   <div class="main-content center container">
     <h2>Registre-se</h2>
   </div>
-
+  {% if form.errors %}
+    <div class="form-content form-content-grid">
+      <div class="message message-error">
+        Por favor, verifique e corrija os erros no formulário.
+      </div>
+    </div>
+  {% endif %}
   <div class="main-content container">
     <form action="{% url 'authors:create' %}" method="POST">
       {% csrf_token %}

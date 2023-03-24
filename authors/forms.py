@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 
 class RegisterForm(forms.ModelForm):
@@ -49,3 +50,15 @@ class RegisterForm(forms.ModelForm):
                 'class': 'placeholder-text',
             }),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        password = cleaned_data.get('password')
+        password_confirm = cleaned_data.get('password_confirm')
+
+        if password != password_confirm:
+            raise ValidationError({
+                'password': 'As senhas não conferem, por favor tente novamente.',  # noqa E501
+                'password_confirm': 'As senhas não conferem, por favor tente novamente.',  # noqa E501
+            })

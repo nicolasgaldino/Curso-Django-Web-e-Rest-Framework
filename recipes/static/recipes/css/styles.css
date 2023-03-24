@@ -317,10 +317,21 @@ h6 {
 }
 
 .form-content label,
-.form-content .help-text {
+.form-content .help-text,
+.errorlist {
   display: block;
   margin: .5rem 0;
   font-size: 1.4rem;
+  letter-spacing: .1rem;
+  list-style-type: none;
+}
+
+.errorlist {
+  color: var(--color-error-dark);
+}
+
+.form-content label {
+  font-weight: bold;
 }
 
 .form-content input {
@@ -349,6 +360,15 @@ h6 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
   gap: calc(var(--spacing-gutter-medium) / 2) var(--spacing-gutter-medium);
+}
+
+.placeholder-text,
+.placeholder-text::placeholder {
+  font-weight: bold;
+}
+
+.placeholder-text::placeholder {
+  letter-spacing: .1rem;
 }
 
 /* Froms */

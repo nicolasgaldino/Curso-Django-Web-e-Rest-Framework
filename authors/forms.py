@@ -3,6 +3,14 @@ from django.contrib.auth.models import User
 
 
 class RegisterForm(forms.ModelForm):
+    password_confirm = forms.CharField(
+        label='Confirmação de senha:',
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Repita sua senha',
+            'class': 'placeholder-text',
+        }),
+    )
+
     class Meta:
         model = User
         fields = [
@@ -12,3 +20,32 @@ class RegisterForm(forms.ModelForm):
             'email',
             'password',
         ]
+        labels = {
+            'first_name': 'Primeiro nome:',
+            'last_name': 'Último nome:',
+            'username': 'Nome de usuário:',
+            'email': 'E-mail:',
+            'password': 'Senha:',
+        }
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'placeholder': 'Ex.: John',
+                'class': 'placeholder-text',
+            }),
+            'last_name': forms.TextInput(attrs={
+                'placeholder': 'Ex.: Doe',
+                'class': 'placeholder-text',
+            }),
+            'username': forms.TextInput(attrs={
+                'placeholder': 'Ex.: john_doe',
+                'class': 'placeholder-text',
+            }),
+            'email': forms.TextInput(attrs={
+                'placeholder': 'Ex.: johndoe@john.com',
+                'class': 'placeholder-text',
+            }),
+            'password': forms.PasswordInput(attrs={
+                'placeholder': 'Digite sua senha',
+                'class': 'placeholder-text',
+            }),
+        }

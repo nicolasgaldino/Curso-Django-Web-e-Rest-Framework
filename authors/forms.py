@@ -37,12 +37,23 @@ class RegisterForm(forms.ModelForm):
     )
 
     username = forms.CharField(
-        error_messages={'required': 'Digite seu nome de usuário'},
+        error_messages={
+            'required': 'Digite seu nome de usuário',
+            'min_length': 'Certifique-se que seu nome de usuário tenha no mínimo 8 caracteres',  # noqa E501
+            'max_length': 'Certifique-se que seu nome de usuário tenha no máximo 100 caracteres',  # noqa E501
+            },
+        help_text=(
+            'Seu nome de usuário deve conter letrar, números ou '
+            'um desses caracteres @/./+/-/_ apenas.'
+            'O tamanho mínimo para seu nome de usuário é de 8 caracteres '
+            'e o máximo é de 100.'
+        ),
         label='Nome de usuário:',
         widget=forms.TextInput(attrs={
             'placeholder': 'Ex.: john_doe',
             'class': 'placeholder-text',
-        })
+        }),
+        min_length=8, max_length=100,
     )
 
     email = forms.EmailField(

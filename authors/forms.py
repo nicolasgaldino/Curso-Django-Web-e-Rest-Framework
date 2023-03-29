@@ -18,7 +18,44 @@ def strong_password(password):
 
 
 class RegisterForm(forms.ModelForm):
+    first_name = forms.CharField(
+        error_messages={'required': 'Digite seu primeiro nome'},
+        label='Primeiro nome:',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Ex.: John',
+            'class': 'placeholder-text',
+        })
+    )
+
+    last_name = forms.CharField(
+        error_messages={'required': 'Digite seu último nome'},
+        label='Último nome:',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Ex.: Doe',
+            'class': 'placeholder-text',
+        })
+    )
+
+    username = forms.CharField(
+        error_messages={'required': 'Digite seu nome de usuário'},
+        label='Nome de usuário:',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Ex.: john_doe',
+            'class': 'placeholder-text',
+        })
+    )
+
+    email = forms.EmailField(
+        error_messages={'required': 'Digite seu e-mail'},
+        label='E-mail:',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Ex.: johndoe@john.com',
+            'class': 'placeholder-text',
+        })
+    )
+
     password = forms.CharField(
+        error_messages={'required': 'Digite sua senha'},
         label='Senha:',
         widget=forms.PasswordInput(attrs={
             'placeholder': 'Digite sua senha',
@@ -28,6 +65,7 @@ class RegisterForm(forms.ModelForm):
     )
 
     password_confirm = forms.CharField(
+        error_messages={'required': 'Repita sua senha'},
         label='Confirmação de senha:',
         widget=forms.PasswordInput(attrs={
             'placeholder': 'Repita sua senha',
@@ -44,30 +82,6 @@ class RegisterForm(forms.ModelForm):
             'email',
             'password',
         ]
-        labels = {
-            'first_name': 'Primeiro nome:',
-            'last_name': 'Último nome:',
-            'username': 'Nome de usuário:',
-            'email': 'E-mail:',
-        }
-        widgets = {
-            'first_name': forms.TextInput(attrs={
-                'placeholder': 'Ex.: John',
-                'class': 'placeholder-text',
-            }),
-            'last_name': forms.TextInput(attrs={
-                'placeholder': 'Ex.: Doe',
-                'class': 'placeholder-text',
-            }),
-            'username': forms.TextInput(attrs={
-                'placeholder': 'Ex.: john_doe',
-                'class': 'placeholder-text',
-            }),
-            'email': forms.TextInput(attrs={
-                'placeholder': 'Ex.: johndoe@john.com',
-                'class': 'placeholder-text',
-            }),
-        }
 
     def clean(self):
         cleaned_data = super().clean()

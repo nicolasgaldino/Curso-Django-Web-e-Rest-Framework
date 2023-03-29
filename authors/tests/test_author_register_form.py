@@ -1,12 +1,8 @@
+from django.urls import reverse
 from django.test import TestCase
 from authors.forms import RegisterForm
 from parameterized import parameterized
-
-
-def label_tester(self, label_value_test, label_value):
-    form = RegisterForm()
-    label = form[label_value].field.label.capitalize()
-    return self.assertEqual(label_value_test, label)
+from django.test import TestCase as DjangoTestCase
 
 
 class AuthorRegisterFormUnitTest(TestCase):
@@ -31,7 +27,29 @@ class AuthorRegisterFormUnitTest(TestCase):
         ('password', 'Senha:'),
         ('password_confirm', 'Confirmação de senha:'),
     ])
-    def test_label_placeholder(self, field, label):
+    def test_fields_label(self, field, label):
         form = RegisterForm()
         current_label = form[field].field.label.capitalize()
         self.assertEqual(label, current_label)
+
+
+class AuthorRegisterFormIntegrationTest(DjangoTestCase):
+    def setUp(self, *args, **kwargs):
+        self.form_data = {
+            'first_name': 'first',
+            'last_name': 'last',
+            'username': 'user',
+            'email': 'user',
+            'password': '22565721aA!@',
+            'password_confirm': '22565721aA!@',
+        }
+        return super().setUp(*args, **kwargs)
+
+    @parameterized.expand([
+        ('username', 'Este campo é obrigatório.')
+    ])
+    def test_fields_cannot_be_empty(self, field, msg):
+        self.form_data[field] = ''
+        url = reverse('authors:create')
+        response = self.client.post(url, data=self.form_data, follow=True)
+        self.assertIn(msg, response.content.decode('utf-8'))

@@ -75,3 +75,20 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         msg = 'Certifique-se que seu nome de usuário tenha no máximo 100 caracteres'  # noqa E501
         self.assertIn(msg, response.content.decode('utf-8'))
         self.assertIn(msg, response.context['form'].errors.get('username'))
+
+    def test_password_field_have_lower_upper_case_letters_and_numbers(self):
+        self.form_data['password'] = 'abcde'
+        url = reverse('authors:create')
+        response = self.client.post(url, data=self.form_data, follow=True)
+        msg = 'Por favor, verifique sua senha. Certifique-se que ela tenha pelo menos 8 caracteres, com letras maiúsculas, minúsculas e números.'  # noqa E501
+        self.assertIn(msg, response.content.decode('utf-8'))
+        self.assertIn(msg, response.context['form'].errors.get('password'))
+
+    def test_password_and_password_confirmation_are_equal(self):
+        self.form_data['password'] = '22565721aA!@'
+        self.form_data['password_confirm'] = '22565g721aA!@'
+        url = reverse('authors:create')
+        response = self.client.post(url, data=self.form_data, follow=True)
+        msg = 'As senhas não conferem, por favor tente novamente.'
+        self.assertIn(msg, response.content.decode('utf-8'))
+        self.assertIn(msg, response.context['form'].errors.get('password'))

@@ -92,3 +92,8 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         msg = 'As senhas não conferem, por favor tente novamente.'
         self.assertIn(msg, response.content.decode('utf-8'))
         self.assertIn(msg, response.context['form'].errors.get('password'))
+
+    def test_send_get_request_to_regristration_create_view_returns_404(self):
+        url = reverse('authors:create')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)

@@ -97,3 +97,12 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         url = reverse('authors:create')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
+
+    def test_if_email_already_exists_in_data_base(self):
+        url = reverse('authors:create')
+        self.client.post(url, data=self.form_data, follow=True)
+        response = self.client.post(url, data=self.form_data, follow=True)
+
+        msg = 'Informe um endereço de email válido.'
+        self.assertIn(msg, response.content.decode('utf-8'))
+        self.assertIn(msg, response.context['form'].errors.get('email'))

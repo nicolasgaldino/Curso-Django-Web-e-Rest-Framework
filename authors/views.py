@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.shortcuts import redirect
 from .forms import RegisterForm, LoginForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 
 
 def register_view(request):
@@ -31,6 +32,7 @@ def register_create(request):
         user.save()
         messages.success(request, 'Usuário cadastrado com sucesso.')
         del(request.session['register_form_data'])  # noqa E275
+        return redirect(reverse('authors:login'))
 
     return redirect('authors:register')
 
@@ -64,3 +66,18 @@ def login_create(request):
         messages.error(request, 'Senha ou nome de usuário inválidos.')
 
     return redirect(login_url)
+
+
+@login_required(
+    login_url='authors:login',
+    redirect_field_name='next',
+    )
+def logout_view(request):
+    if not request.POST:
+        return redirect(reverse('authors:login'))
+
+    if request.POST.get('username') != request.user.username:
+        return redirect(reverse('authors:login'))
+
+    logout(request)
+    return redirect(reverse('authors:login'))

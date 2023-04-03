@@ -371,6 +371,18 @@ h6 {
   letter-spacing: .1rem;
 }
 
+.inline-form {
+  display: inline;
+}
+
+.plaintext-button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-primary);
+  font-size: 1.6rem;
+}
+
 /* Froms */
 
 /* Flash Messages */

@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.shortcuts import render
 from django.shortcuts import redirect
 from .forms import RegisterForm, LoginForm
+from django.contrib.auth import authenticate, login
 
 
 def register_view(request):
@@ -43,4 +44,23 @@ def login_view(request):
 
 
 def login_create(request):
-    return render(request, 'authors/pages/login.html')
+    if not request.POST:
+        raise Http404()
+
+    form = LoginForm(request.POST)
+    login_url = reverse('authors:login')
+
+    if form.is_valid():
+        authenticated_user = authenticate(
+            username=form.cleaned_data.get('username', ''),
+            password=form.cleaned_data.get('password', ''),
+        )
+        if authenticated_user is not None:
+            messages.success(request, 'Login efetuado com sucesso. Bem-vindo!')
+            login(request, authenticated_user)
+        else:
+            messages.error(request, 'Credênciais de usuário inválidas.')
+    else:
+        messages.error(request, 'Senha ou nome de usuário inválidos.')
+
+    return redirect(login_url)

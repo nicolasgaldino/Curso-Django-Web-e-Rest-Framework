@@ -3,10 +3,7 @@ from recipes.models import Category, Recipe
 from django.contrib.auth.models import User
 
 
-class RecipeTestBase(TestCase):
-    def setUp(self) -> None:
-        return super().setUp()
-
+class RecipeMixin:
     def make_category(self, name='Category'):
         return Category.objects.create(name=name)
 
@@ -61,3 +58,8 @@ class RecipeTestBase(TestCase):
             servings_unit=servings_unit,
             is_published=is_published,
         )
+
+
+class RecipeTestBase(TestCase, RecipeMixin):
+    def setUp(self) -> None:
+        return super().setUp()

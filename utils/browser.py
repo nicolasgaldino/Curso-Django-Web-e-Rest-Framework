@@ -1,3 +1,4 @@
+import os
 from time import sleep
 from pathlib import Path
 from selenium import webdriver
@@ -17,12 +18,15 @@ def make_chrome_browser(*options):
         for option in options:
             chrome_options.add_argument(option)
 
+    if os.environ.get('SELENIUM_HEADLESS') == '1':
+        chrome_options.add_argument('--headless')
+
     chrome_service = Service(executable_path='CHROMEDRIVER_PATH')
     browser = webdriver.Chrome(service=chrome_service, options=chrome_options)
     return browser
 
 
 if __name__ == '__main__':
-    browser = make_chrome_browser('--headless')
+    browser = make_chrome_browser()
     browser.get('http://www.google.com.br/')
     sleep(30)

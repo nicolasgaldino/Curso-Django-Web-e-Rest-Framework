@@ -118,3 +118,7 @@ db copy.sqlite3
 
 # Add again for course purpose
 !db.sqlite3
+
+# Comandos do requirments
+# pip freeze > requirements.txt
+# pip install -r requirements.txt
